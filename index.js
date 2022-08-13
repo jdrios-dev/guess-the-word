@@ -25,6 +25,17 @@ io.on("connection", (socket) => {
     io.emit("reset");
   });
 
+  socket.on("check-ready", () => {
+    io.emit("check-ready");
+  });
+  socket.on("check-out", () => {
+    io.emit("check-out");
+  });
+
+  socket.on("play-success", () => {
+    io.emit("play-success");
+  });
+
   socket.on("disconnect", () => {
     io.emit("leave person", socket.id);
   });

@@ -10,7 +10,13 @@
   <body>
     <div class="container-head">
       <p>Try to guess your partner word!</p>
-      <button id="reset">Reset</button>
+      <div class="check" id="check"></div>
+      <div>
+        <button id="reset" class="reset">Reset Game</button>
+        <button onclick="resetChat()" id="reset-chat" class="reset">
+          Reset Chat
+        </button>
+      </div>
     </div>
     <div class="container">
       <div>
@@ -24,18 +30,20 @@
       </div>
       <div>
         <p class="title">Chat here!</p>
-        <ul id="chat-messages" class="messages"></ul>
+        <ul id="chat-messages" class="messages chat-messages"></ul>
         <form id="chat-form" class="form" action="">
           <input id="chat-input" class="input" autocomplete="off" />
           <button>Send</button>
         </form>
       </div>
+      <audio id="mySound" src="./success.mp3"></audio>
     </div>
 
     <script src="https://guess-the-word-two.herokuapp.com/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
-      var myid = document.getElementById("my-id");
+      var check = document.getElementById("check");
+      var mySound = document.getElementById("mySound");
       // Game
       var messages = document.getElementById("messages");
       var form = document.getElementById("form");
@@ -63,6 +71,7 @@
       });
 
       let msgs = [];
+
       socket.on("chat message", function (msg) {
         var item = document.createElement("li");
         msgs.push(msg);
@@ -70,11 +79,29 @@
           item.textContent = `${msgs[0]}  ${msgs[1]}`;
           if (msgs[0] === msgs[1]) {
             item.style.backgroundColor = "#dcffca";
+            socket.emit("play-success");
           }
           messages.appendChild(item);
           msgs = [];
         }
+        if (msgs.length === 1) {
+          socket.emit("check-ready");
+        } else {
+          socket.emit("check-out");
+        }
         window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      socket.on("check-ready", () => {
+        check.style.display = "block";
+      });
+
+      socket.on("play-success", () => {
+        mySound.play();
+      });
+
+      socket.on("check-out", () => {
+        check.style.display = "none";
       });
 
       socket.on("chat message-chat", function (msg, id) {
@@ -109,6 +136,10 @@
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
+
+      const resetChat = () => {
+        chatMessages.innerHTML = "";
+      };
     </script>
   </body>
 </html>
