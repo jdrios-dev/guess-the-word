@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Guess the word</title>
+  </head>
+  <body>
+    <div class="container-head">
+      <p>Try to guess your partner word!</p>
+      <button id="reset">Reset</button>
+    </div>
+    <div class="container">
+      <div>
+        <p class="title">Game here!</p>
+        <ul id="messages" class="messages"></ul>
+        <form id="form" class="form" action="">
+          <input id="input" class="input" autocomplete="off" /><button>
+            Send
+          </button>
+        </form>
+      </div>
+      <div>
+        <p class="title">Chat here!</p>
+        <ul id="chat-messages" class="messages"></ul>
+        <form id="chat-form" class="form" action="">
+          <input id="chat-input" class="input" autocomplete="off" />
+          <button>Send</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="./commands.js"></script>
+  </body>
+</html>
